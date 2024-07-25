@@ -1,5 +1,6 @@
 from django.db import models
-from .validators import validar_par
+from .validators import validar_par, validar_gestion
+from django.core.exceptions import ValidationError
 
 class Estado(models.TextChoices):
     ACTIVE = 'ac', 'Active'
@@ -30,8 +31,8 @@ class Unidad(models.Model):
 class SeguimientoTramite(models.Model):
     unidadOrigen = models.ForeignKey(Unidad, on_delete=models.CASCADE)
     tipoTramite = models.ForeignKey(TipoTramite, on_delete=models.CASCADE)
-    nroTramite = models.DecimalField(max_digits=10, decimal_places=0, validators=[validar_par])
-    gestionTramite = models.DecimalField(max_digits=4, decimal_places=0, blank=True)
+    nroTramite = models.DecimalField(max_digits=10, decimal_places=0)
+    gestionTramite = models.DecimalField(max_digits=4, decimal_places=0, blank=True, validators=[validar_gestion])
     fechaIngreso = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(
         max_length=2,
@@ -40,6 +41,10 @@ class SeguimientoTramite(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def clean(self) :
+        if SeguimientoTramite.objects.filter(nroTramite = self.nroTramite, gestionTramite = self.gestionTramite).exists():
+            raise ValidationError('Numero de Tramite y Gestion ya existen')
 
 class TramiteTraza(models.Model):
     seguimientoTramite = models.ForeignKey(SeguimientoTramite, on_delete=models.CASCADE)
