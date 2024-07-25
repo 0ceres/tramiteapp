@@ -45,7 +45,7 @@ class TramiteTraza(models.Model):
     seguimientoTramite = models.ForeignKey(SeguimientoTramite, on_delete=models.CASCADE)
     unidadActual = models.ForeignKey(Unidad, on_delete=models.CASCADE)
     fechaIngreso = models.DateTimeField(auto_now_add=True)
-    fechaSalida = models.DateTimeField()
+    fechaSalida = models.DateTimeField(blank=True, null=True)
     estado = models.CharField(
         max_length=2,
         choices=Estado.choices,

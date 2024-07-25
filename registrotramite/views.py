@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from .models import SeguimientoTramite, Unidad, TramiteTraza, TipoTramite
 from .forms import TramiteForm
 from rest_framework import viewsets
-from .serializers import SeguimientoTramiteSerializer, UnidadSerializer, ReporteTramites2023Serializer, TramiteTrazaSerializer, TipoTramiteSerializer
+from .serializers import SeguimientoTramiteSerializer, UnidadSerializer, ReporteTramites2023Serializer, TramiteTrazaSerializer, TipoTramiteSerializer, ReporteTramiteTrazaSerializer
 from rest_framework import generics
 from rest_framework.decorators import api_view
 
@@ -145,16 +145,17 @@ def reporte_tramites_2023(request):
         )
 
 @api_view(['GET'])
-def tramite_traza(request):
+def tramite_traza(request, id):
     """
     Trazas del tramite __Trámites__
     """
     try:
-        id_tramite = request.GET.get("id")
+        # id_tramite = request.GET.get("id")
+        id_tramite = id
         tramite = get_object_or_404(SeguimientoTramite, id=id_tramite)
-        trazas = tramite.trazas.filter(id_tramite=id_tramite)
+        trazas = TramiteTraza.objects.filter(seguimientoTramite_id=id_tramite)
         return JsonResponse(
-            TramiteTrazaSerializer({
+            ReporteTramiteTrazaSerializer({
                 "tramite" : tramite,
                 "tramiteTrazas": trazas 
             }).data,
