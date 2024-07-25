@@ -1,0 +1,9 @@
+<h1>Trámites</h1>
+
+<ul> 
+    {% for tramite in tramites %}
+    <li> {{ tramite.nroTramite }}</li>
+    <li> {{ tramite.gestionTramite }}</li>
+    <li> {{ tramite.unidadOrigen }}</li>
+    {% endfor %}
+</ul>

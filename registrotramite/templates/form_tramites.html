@@ -1,0 +1,17 @@
+<h1>Trámites</h1>
+
+<form action="" method="post">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+</form>
+
+<ul> 
+    {% for tramite in tramites %}
+    <li> {{ tramite.nroTramite }}</li>
+    <li> {{ tramite.gestionTramite }}</li>
+    <li> {{ tramite.unidadOrigen }}</li>
+    {% endfor %}
+</ul>
